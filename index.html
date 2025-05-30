@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RobloxScriptBin - Share Your Roblox Scripts</title>
+    <title>RobloxScriptBin - The Ultimate Roblox Script Sharing Hub</title>
     <style type="text/css">
         * {
             margin: 0;
@@ -18,18 +18,20 @@
             padding: 20px;
         }
         .container {
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 0 auto;
         }
         header {
             text-align: center;
-            padding: 20px 0;
+            padding: 30px 0;
             border-bottom: 2px solid #ff4500;
+            background: linear-gradient(to bottom, #2a2a2a, #1e1e1e);
         }
         h1 {
             color: #ff4500;
-            font-size: 32px;
+            font-size: 36px;
             margin-bottom: 10px;
+            text-shadow: 0 0 5px #ff4500;
         }
         .tagline {
             color: #aaaaaa;
@@ -38,25 +40,27 @@
         .search-section {
             margin: 20px 0;
             text-align: center;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
         }
         .search-section input {
-            width: 50%;
+            width: 60%;
             background-color: #333333;
             color: #ffffff;
             border: 1px solid #555555;
             border-radius: 5px;
-            padding: 10px;
+            padding: 12px;
             font-size: 14px;
         }
         .search-section button {
             background-color: #ff4500;
             color: #ffffff;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 24px;
             border-radius: 5px;
             font-size: 14px;
             cursor: pointer;
-            margin-left: 10px;
             transition: background-color 0.3s;
         }
         .search-section button:hover {
@@ -65,18 +69,24 @@
         .form-section {
             margin: 30px 0;
             background-color: #2a2a2a;
-            padding: 20px;
+            padding: 25px;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
         }
         .form-section h2 {
             color: #ff4500;
-            font-size: 24px;
+            font-size: 26px;
             margin-bottom: 15px;
+        }
+        .form-section label {
+            display: block;
+            color: #aaaaaa;
+            font-size: 14px;
+            margin-bottom: 5px;
         }
         textarea {
             width: 100%;
-            height: 150px;
+            height: 200px;
             background-color: #333333;
             color: #ffffff;
             border: 1px solid #555555;
@@ -100,7 +110,7 @@
             background-color: #ff4500;
             color: #ffffff;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 24px;
             border-radius: 5px;
             font-size: 16px;
             cursor: pointer;
@@ -114,8 +124,8 @@
         }
         .script-section h2 {
             color: #ff4500;
-            font-size: 24px;
-            margin-bottom: 15px;
+            font-size: 26px;
+            margin-bottom: 20px;
         }
         .script-card {
             background-color: #2a2a2a;
@@ -123,10 +133,14 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
             margin-bottom: 20px;
+            transition: transform 0.2s;
+        }
+        .script-card:hover {
+            transform: translateY(-5px);
         }
         .script-title {
             color: #ff4500;
-            font-size: 20px;
+            font-size: 22px;
             margin-bottom: 10px;
         }
         .script-meta {
@@ -184,25 +198,29 @@
     <div class="container">
         <header>
             <h1>RobloxScriptBin</h1>
-            <p class="tagline">Share and Discover Roblox Scripts with Ease</p>
+            <p class="tagline">The Ultimate Hub for Sharing and Discovering Roblox Scripts</p>
         </header>
 
         <div class="search-section">
-            <input type="text" id="search-bar" placeholder="Search scripts by title or keyword...">
+            <input type="text" id="search-bar" placeholder="Search scripts by title, author, or keyword...">
             <button onclick="searchScripts()">Search</button>
         </div>
 
         <div class="form-section">
             <h2>Share a Script</h2>
             <form id="script-form" onsubmit="submitScript(event)">
-                <input type="text" id="script-title" placeholder="Script Title" required>
+                <label for="script-title">Script Title</label>
+                <input type="text" id="script-title" placeholder="Enter a title for your script" required>
+                <label for="script-author">Your Username</label>
+                <input type="text" id="script-author" placeholder="Enter your username" required>
+                <label for="script-content">Script Content</label>
                 <textarea id="script-content" placeholder="Paste your Roblox script here..." required></textarea>
                 <button type="submit">Submit Script</button>
             </form>
         </div>
 
         <div class="script-section" id="script-section">
-            <h2>Latest Scripts</h2>
+            <h2>Recent Pastes</h2>
             <div class="script-card" data-title="Simple Teleport Script">
                 <div class="script-title">Simple Teleport Script</div>
                 <div class="script-meta">Posted by: AnonUser | Date: 2025-05-30 15:20:00 UTC</div>
@@ -233,8 +251,8 @@
     </div>
 
     <script>
-        // Simulated script database (in a real app, this would be a backend)
-        let scripts = [
+        // Initialize scripts from localStorage or use default scripts
+        let scripts = JSON.parse(localStorage.getItem('robloxScripts')) || [
             {
                 title: "Simple Teleport Script",
                 author: "AnonUser",
@@ -259,21 +277,28 @@ end`,
             }
         ];
 
+        // Save scripts to localStorage
+        function saveScripts() {
+            localStorage.setItem('robloxScripts', JSON.stringify(scripts));
+        }
+
         // Submit a new script
         function submitScript(event) {
             event.preventDefault();
             const title = document.getElementById('script-title').value;
+            const author = document.getElementById('script-author').value;
             const content = document.getElementById('script-content').value;
 
             const newScript = {
                 title: title,
-                author: "CurrentUser",
-                date: "2025-05-30 15:25:00 UTC",
+                author: author,
+                date: "2025-05-30 15:32:00 UTC", // Current time in UTC (09:02 PM IST)
                 content: content,
                 removed: false
             };
 
-            scripts.push(newScript);
+            scripts.unshift(newScript); // Add new script to the top
+            saveScripts();
             renderScripts(scripts);
 
             // Reset form
@@ -284,7 +309,9 @@ end`,
         function searchScripts() {
             const query = document.getElementById('search-bar').value.toLowerCase();
             const filteredScripts = scripts.filter(script => 
-                script.title.toLowerCase().includes(query) || script.content.toLowerCase().includes(query)
+                script.title.toLowerCase().includes(query) ||
+                script.author.toLowerCase().includes(query) ||
+                script.content.toLowerCase().includes(query)
             );
             renderScripts(filteredScripts);
         }
@@ -292,7 +319,12 @@ end`,
         // Render scripts to the page
         function renderScripts(scriptList) {
             const scriptSection = document.getElementById('script-section');
-            scriptSection.innerHTML = '<h2>Latest Scripts</h2>';
+            scriptSection.innerHTML = '<h2>Recent Pastes</h2>';
+
+            if (scriptList.length === 0) {
+                scriptSection.innerHTML += '<p style="color: #aaaaaa; text-align: center;">No scripts found.</p>';
+                return;
+            }
 
             scriptList.forEach(script => {
                 const scriptCard = document.createElement('div');
@@ -314,6 +346,9 @@ end`,
                 scriptSection.appendChild(scriptCard);
             });
         }
+
+        // Initial render
+        renderScripts(scripts);
     </script>
 </body>
 </html>
