@@ -35,6 +35,33 @@
             color: #aaaaaa;
             font-size: 16px;
         }
+        .search-section {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .search-section input {
+            width: 50%;
+            background-color: #333333;
+            color: #ffffff;
+            border: 1px solid #555555;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 14px;
+        }
+        .search-section button {
+            background-color: #ff4500;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: background-color 0.3s;
+        }
+        .search-section button:hover {
+            background-color: #e03e00;
+        }
         .form-section {
             margin: 30px 0;
             background-color: #2a2a2a;
@@ -128,6 +155,15 @@
         .script-code .function {
             color: #50fa7b;
         }
+        .removed-notice {
+            color: #ff5555;
+            font-size: 16px;
+            text-align: center;
+            background-color: #3a2a2a;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #ff3333;
+        }
         footer {
             text-align: center;
             padding: 20px 0;
@@ -151,37 +187,133 @@
             <p class="tagline">Share and Discover Roblox Scripts with Ease</p>
         </header>
 
+        <div class="search-section">
+            <input type="text" id="search-bar" placeholder="Search scripts by title or keyword...">
+            <button onclick="searchScripts()">Search</button>
+        </div>
+
         <div class="form-section">
             <h2>Share a Script</h2>
-            <form>
-                <input type="text" placeholder="Script Title" required>
-                <textarea placeholder="Paste your Roblox script here..." required></textarea>
+            <form id="script-form" onsubmit="submitScript(event)">
+                <input type="text" id="script-title" placeholder="Script Title" required>
+                <textarea id="script-content" placeholder="Paste your Roblox script here..." required></textarea>
                 <button type="submit">Submit Script</button>
             </form>
         </div>
 
-        <div class="script-section">
+        <div class="script-section" id="script-section">
             <h2>Latest Scripts</h2>
-            <div class="script-card">
+            <div class="script-card" data-title="Simple Teleport Script">
                 <div class="script-title">Simple Teleport Script</div>
                 <div class="script-meta">Posted by: AnonUser | Date: 2025-05-30 15:20:00 UTC</div>
+                <div class="removed-notice">
+                    This paste has been removed due to a violation of RobloxScriptBin policies. Reason: Suspected malicious code. Contact support for more details.
+                </div>
+            </div>
+            <div class="script-card" data-title="Speed Boost Script">
+                <div class="script-title">Speed Boost Script</div>
+                <div class="script-meta">Posted by: ScriptMaster | Date: 2025-05-30 15:23:00 UTC</div>
                 <div class="script-code">
                     <span class="keyword">local</span> player = game.<span class="function">Players</span>.LocalPlayer
                     <span class="keyword">local</span> character = player.Character
-                    <span class="keyword">local</span> targetPosition = Vector3.<span class="keyword">new</span>(100, 10, 50)
+                    <span class="keyword">local</span> humanoid = character:FindFirstChild(<span class="string">"Humanoid"</span>)
 
-                    <span class="comment">-- Teleport the player to the target position</span>
-                    <span class="keyword">if</span> character <span class="keyword">then</span>
-                        character:MoveTo(targetPosition)
-                        print(<span class="string">"Teleported to new location!"</span>)
+                    <span class="comment">-- Increase player speed</span>
+                    <span class="keyword">if</span> humanoid <span class="keyword">then</span>
+                        humanoid.WalkSpeed = 50
+                        print(<span class="string">"Speed boosted to 50!"</span>)
                     <span class="keyword">end</span>
                 </div>
             </div>
         </div>
 
         <footer>
-            &copy; 2025 RobloxScriptBin | <a href="mailto:support@robloxscriptbin.com">Contact Us</a> | <a href="#">Terms of Service</a>
+            © 2025 RobloxScriptBin | <a href="mailto:support@robloxscriptbin.com">Contact Us</a> | <a href="#">Terms of Service</a>
         </footer>
     </div>
+
+    <script>
+        // Simulated script database (in a real app, this would be a backend)
+        let scripts = [
+            {
+                title: "Simple Teleport Script",
+                author: "AnonUser",
+                date: "2025-05-30 15:20:00 UTC",
+                content: "This paste has been removed due to a violation of RobloxScriptBin policies. Reason: Suspected malicious code. Contact support for more details.",
+                removed: true
+            },
+            {
+                title: "Speed Boost Script",
+                author: "ScriptMaster",
+                date: "2025-05-30 15:23:00 UTC",
+                content: `local player = game.Players.LocalPlayer
+local character = player.Character
+local humanoid = character:FindFirstChild("Humanoid")
+
+-- Increase player speed
+if humanoid then
+    humanoid.WalkSpeed = 50
+    print("Speed boosted to 50!")
+end`,
+                removed: false
+            }
+        ];
+
+        // Submit a new script
+        function submitScript(event) {
+            event.preventDefault();
+            const title = document.getElementById('script-title').value;
+            const content = document.getElementById('script-content').value;
+
+            const newScript = {
+                title: title,
+                author: "CurrentUser",
+                date: "2025-05-30 15:25:00 UTC",
+                content: content,
+                removed: false
+            };
+
+            scripts.push(newScript);
+            renderScripts(scripts);
+
+            // Reset form
+            document.getElementById('script-form').reset();
+        }
+
+        // Search scripts
+        function searchScripts() {
+            const query = document.getElementById('search-bar').value.toLowerCase();
+            const filteredScripts = scripts.filter(script => 
+                script.title.toLowerCase().includes(query) || script.content.toLowerCase().includes(query)
+            );
+            renderScripts(filteredScripts);
+        }
+
+        // Render scripts to the page
+        function renderScripts(scriptList) {
+            const scriptSection = document.getElementById('script-section');
+            scriptSection.innerHTML = '<h2>Latest Scripts</h2>';
+
+            scriptList.forEach(script => {
+                const scriptCard = document.createElement('div');
+                scriptCard.className = 'script-card';
+                scriptCard.setAttribute('data-title', script.title);
+
+                scriptCard.innerHTML = `
+                    <div class="script-title">${script.title}</div>
+                    <div class="script-meta">Posted by: ${script.author} | Date: ${script.date}</div>
+                    <div class="${script.removed ? 'removed-notice' : 'script-code'}">
+                        ${script.removed ? script.content : 
+                        script.content
+                            .replace(/(local|if|then|end)/g, '<span class="keyword">$1</span>')
+                            .replace(/(Players|FindFirstChild)/g, '<span class="function">$1</span>')
+                            .replace(/"([^"]*)"/g, '<span class="string">"$1"</span>')
+                            .replace(/--.*/g, '<span class="comment">$1</span>')}
+                    </div>
+                `;
+                scriptSection.appendChild(scriptCard);
+            });
+        }
+    </script>
 </body>
 </html>
