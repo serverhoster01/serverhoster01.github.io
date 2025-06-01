@@ -3,352 +3,573 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RobloxScriptBin - The Ultimate Roblox Script Sharing Hub</title>
-    <style type="text/css">
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    <title>StarCrafter: Cosmic Forge</title>
+    <style>
         body {
-            background-color: #1e1e1e;
-            color: #ffffff;
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            padding: 20px;
-        }
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-        header {
-            text-align: center;
-            padding: 30px 0;
-            border-bottom: 2px solid #ff4500;
-            background: linear-gradient(to bottom, #2a2a2a, #1e1e1e);
-        }
-        h1 {
-            color: #ff4500;
-            font-size: 36px;
-            margin-bottom: 10px;
-            text-shadow: 0 0 5px #ff4500;
-        }
-        .tagline {
-            color: #aaaaaa;
-            font-size: 16px;
-        }
-        .search-section {
-            margin: 20px 0;
-            text-align: center;
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(145deg, #0a0a0a, #1a1a1a);
+            color: #e0e0e0;
+            margin: 0;
             display: flex;
             justify-content: center;
-            gap: 10px;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
         }
-        .search-section input {
-            width: 60%;
-            background-color: #333333;
-            color: #ffffff;
-            border: 1px solid #555555;
-            border-radius: 5px;
-            padding: 12px;
-            font-size: 14px;
+        .container {
+            text-align: center;
+            position: relative;
+            width: 100%;
+            max-width: 800px;
         }
-        .search-section button {
-            background-color: #ff4500;
-            color: #ffffff;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 5px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: background-color 0.3s;
+        #gameCanvas {
+            border: 3px solid #ff0066;
+            border-radius: 12px;
+            box-shadow: 0 0 30px rgba(255, 0, 102, 0.7);
+            background: #1a1a1a;
         }
-        .search-section button:hover {
-            background-color: #e03e00;
+        #score, #highScore, #lives, #gameOver, #pauseMenu, #settings, #tutorial {
+            color: #ff0066;
+            text-shadow: 0 0 10px #ff0066;
+            font-size: 20px;
+            margin: 8px 0;
         }
-        .form-section {
-            margin: 30px 0;
-            background-color: #2a2a2a;
+        #gameOver, #pauseMenu, #settings, #tutorial {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
             padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-        }
-        .form-section h2 {
-            color: #ff4500;
-            font-size: 26px;
-            margin-bottom: 15px;
-        }
-        .form-section label {
-            display: block;
-            color: #aaaaaa;
-            font-size: 14px;
-            margin-bottom: 5px;
-        }
-        textarea {
-            width: 100%;
-            height: 200px;
-            background-color: #333333;
-            color: #ffffff;
-            border: 1px solid #555555;
-            border-radius: 5px;
-            padding: 10px;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            resize: vertical;
-        }
-        input[type="text"] {
-            width: 100%;
-            background-color: #333333;
-            color: #ffffff;
-            border: 1px solid #555555;
-            border-radius: 5px;
-            padding: 10px;
-            font-size: 14px;
-            margin-bottom: 10px;
+            border-radius: 12px;
+            border: 3px solid #00ff00;
+            z-index: 10;
+            text-align: left;
         }
         button {
-            background-color: #ff4500;
-            color: #ffffff;
+            background: #ff0066;
+            color: #1a1a1a;
             border: none;
             padding: 12px 24px;
-            border-radius: 5px;
             font-size: 16px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            border-radius: 6px;
+            transition: all 0.3s;
+            margin: 5px;
         }
         button:hover {
-            background-color: #e03e00;
+            background: #00ff00;
+            box-shadow: 0 0 15px #00ff00;
         }
-        .script-section {
-            margin: 30px 0;
+        .leaderboard, .achievements {
+            margin: 15px 0;
+            color: #00ff00;
         }
-        .script-section h2 {
-            color: #ff4500;
-            font-size: 26px;
-            margin-bottom: 20px;
+        .leaderboard li, .achievements li {
+            list-style: none;
+            margin: 5px 0;
         }
-        .script-card {
-            background-color: #2a2a2a;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            margin-bottom: 20px;
-            transition: transform 0.2s;
-        }
-        .script-card:hover {
-            transform: translateY(-5px);
-        }
-        .script-title {
-            color: #ff4500;
-            font-size: 22px;
-            margin-bottom: 10px;
-        }
-        .script-meta {
-            color: #aaaaaa;
-            font-size: 12px;
-            margin-bottom: 10px;
-        }
-        .script-code {
-            background-color: #333333;
-            padding: 15px;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            white-space: pre-wrap;
-            overflow-x: auto;
-        }
-        .script-code .keyword {
-            color: #ff79c6;
-        }
-        .script-code .string {
-            color: #f1fa8c;
-        }
-        .script-code .comment {
-            color: #6272a4;
-        }
-        .script-code .function {
-            color: #50fa7b;
-        }
-        .removed-notice {
-            color: #ff5555;
-            font-size: 16px;
-            text-align: center;
-            background-color: #3a2a2a;
-            padding: 15px;
-            border-radius: 5px;
-            border: 1px solid #ff3333;
-        }
-        footer {
-            text-align: center;
-            padding: 20px 0;
-            border-top: 2px solid #ff4500;
-            color: #aaaaaa;
-            font-size: 14px;
-        }
-        footer a {
-            color: #ff4500;
-            text-decoration: none;
-        }
-        footer a:hover {
-            text-decoration: underline;
+        @media (max-width: 600px) {
+            #gameCanvas {
+                width: 100%;
+                height: 400px;
+            }
+            #score, #highScore, #lives, #gameOver, #pauseMenu, #settings, #tutorial {
+                font-size: 16px;
+            }
+            button {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>RobloxScriptBin</h1>
-            <p class="tagline">The Ultimate Hub for Sharing and Discovering Roblox Scripts</p>
-        </header>
-
-        <div class="search-section">
-            <input type="text" id="search-bar" placeholder="Search scripts by title, author, or keyword...">
-            <button onclick="searchScripts()">Search</button>
-        </div>
-
-        <div class="form-section">
-            <h2>Share a Script</h2>
-            <form id="script-form" onsubmit="submitScript(event)">
-                <label for="script-title">Script Title</label>
-                <input type="text" id="script-title" placeholder="Enter a title for your script" required>
-                <label for="script-author">Your Username</label>
-                <input type="text" id="script-author" placeholder="Enter your username" required>
-                <label for="script-content">Script Content</label>
-                <textarea id="script-content" placeholder="Paste your Roblox script here..." required></textarea>
-                <button type="submit">Submit Script</button>
-            </form>
-        </div>
-
-        <div class="script-section" id="script-section">
-            <h2>Recent Pastes</h2>
-            <div class="script-card" data-title="Simple Teleport Script">
-                <div class="script-title">Simple Teleport Script</div>
-                <div class="script-meta">Posted by: AnonUser | Date: 2025-05-30 15:20:00 UTC</div>
-                <div class="removed-notice">
-                    This paste has been removed due to a violation of RobloxScriptBin policies. Reason: Suspected malicious code. Contact support for more details.
-                </div>
+        <div id="score">Score: 0</div>
+        <div id="highScore">High Score: 0</div>
+        <div id="lives">Lives: 3</div>
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        <div id="gameOver">
+            <h2>Game Over!</h2>
+            <p>Final Score: <span id="finalScore"></span></p>
+            <div class="leaderboard">
+                <h3>Leaderboard</h3>
+                <ul id="leaderboardList"></ul>
             </div>
-            <div class="script-card" data-title="Speed Boost Script">
-                <div class="script-title">Speed Boost Script</div>
-                <div class="script-meta">Posted by: ScriptMaster | Date: 2025-05-30 15:23:00 UTC</div>
-                <div class="script-code">
-                    <span class="keyword">local</span> player = game.<span class="function">Players</span>.LocalPlayer
-                    <span class="keyword">local</span> character = player.Character
-                    <span class="keyword">local</span> humanoid = character:FindFirstChild(<span class="string">"Humanoid"</span>)
-
-                    <span class="comment">-- Increase player speed</span>
-                    <span class="keyword">if</span> humanoid <span class="keyword">then</span>
-                        humanoid.WalkSpeed = 50
-                        print(<span class="string">"Speed boosted to 50!"</span>)
-                    <span class="keyword">end</span>
-                </div>
+            <div class="achievements">
+                <h3>Achievements Unlocked</h3>
+                <ul id="achievementsList"></ul>
             </div>
+            <button onclick="restartGame()">Restart</button>
+            <button onclick="showSettings()">Settings</button>
+            <button onclick="showTutorial()">Tutorial</button>
         </div>
-
-        <footer>
-            © 2025 RobloxScriptBin | <a href="mailto:support@robloxscriptbin.com">Contact Us</a> | <a href="#">Terms of Service</a>
-        </footer>
+        <div id="pauseMenu">
+            <h2>Paused</h2>
+            <button onclick="resumeGame()">Resume</button>
+            <button onclick="showSettings()">Settings</button>
+            <button onclick="showTutorial()">Tutorial</button>
+            <button onclick="restartGame()">Restart</button>
+        </div>
+        <div id="settings">
+            <h2>Settings</h2>
+            <p><label><input type="checkbox" id="soundToggle" checked> Enable Sound</label></p>
+            <p><label>Sensitivity: <input type="range" id="sensitivity" min="3" max="12" value="6"></label></p>
+            <button onclick="saveSettings()">Save</button>
+            <button onclick="closeSettings()">Back</button>
+        </div>
+        <div id="tutorial">
+            <h2>Tutorial</h2>
+            <p>Navigate your spaceship to dodge asteroids or shoot them with the spacebar. Collect power-ups to gain shields, speed boosts, or score multipliers. Survive to unlock achievements!</p>
+            <ul>
+                <li><strong>Controls</strong>: Arrow keys/WASD to move, Space to shoot, P to pause, S for settings.</li>
+                <li><strong>Mobile</strong>: Swipe to move, tap to shoot.</li>
+                <li><strong>Power-Ups</strong>: Green (speed), Yellow (shield), Blue (score multiplier).</li>
+                <li><strong>Lives</strong>: Lose a life per asteroid hit. Game over at 0 lives.</li>
+            </ul>
+            <button onclick="closeTutorial()">Close</button>
+        </div>
     </div>
-
     <script>
-        // Initialize scripts from localStorage or use default scripts
-        let scripts = JSON.parse(localStorage.getItem('robloxScripts')) || [
-            {
-                title: "Simple Teleport Script",
-                author: "AnonUser",
-                date: "2025-05-30 15:20:00 UTC",
-                content: "This paste has been removed due to a violation of RobloxScriptBin policies. Reason: Suspected malicious code. Contact support for more details.",
-                removed: true
-            },
-            {
-                title: "Speed Boost Script",
-                author: "ScriptMaster",
-                date: "2025-05-30 15:23:00 UTC",
-                content: `local player = game.Players.LocalPlayer
-local character = player.Character
-local humanoid = character:FindFirstChild("Humanoid")
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreDisplay = document.getElementById('score');
+        const highScoreDisplay = document.getElementById('highScore');
+        const livesDisplay = document.getElementById('lives');
+        const gameOverScreen = document.getElementById('gameOver');
+        const pauseMenu = document.getElementById('pauseMenu');
+        const settingsScreen = document.getElementById('settings');
+        const tutorialScreen = document.getElementById('tutorial');
+        const finalScoreDisplay = document.getElementById('finalScore');
+        const leaderboardList = document.getElementById('leaderboardList');
+        const achievementsList = document.getElementById('achievementsList');
+        const soundToggle = document.getElementById('soundToggle');
+        const sensitivityInput = document.getElementById('sensitivity');
 
--- Increase player speed
-if humanoid then
-    humanoid.WalkSpeed = 50
-    print("Speed boosted to 50!")
-end`,
-                removed: false
-            }
-        ];
+        let spaceship = { x: 380, y: 500, width: 40, height: 40, speed: 6 };
+        let asteroids = [];
+        let bullets = [];
+        let powerUps = [];
+        let particles = [];
+        let score = 0;
+        let highScore = parseInt(localStorage.getItem('highScore')) || 0;
+        let leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
+        let achievements = JSON.parse(localStorage.getItem('achievements')) || [];
+        let lives = 3;
+        let gameOver = false;
+        let paused = false;
+        let gameSpeed = 1.5; // Slower initial speed
+        let asteroidSpawnRate = 70; // Slower spawn rate
+        let frameCount = 0;
+        let shieldActive = false;
+        let scoreMultiplier = 1;
+        let soundEnabled = true;
 
-        // Save scripts to localStorage
-        function saveScripts() {
-            localStorage.setItem('robloxScripts', JSON.stringify(scripts));
-        }
+        highScoreDisplay.textContent = `High Score: ${highScore}`;
 
-        // Submit a new script
-        function submitScript(event) {
-            event.preventDefault();
-            const title = document.getElementById('script-title').value;
-            const author = document.getElementById('script-author').value;
-            const content = document.getElementById('script-content').value;
+        // Nebula background
+        const nebula = Array(50).fill().map(() => ({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            radius: Math.random() * 5 + 2,
+            speed: Math.random() * 0.3 + 0.1,
+            color: `hsl(${Math.random() * 60 + 300}, 70%, 50%)`
+        }));
 
-            const newScript = {
-                title: title,
-                author: author,
-                date: "2025-05-30 15:32:00 UTC", // Current time in UTC (09:02 PM IST)
-                content: content,
-                removed: false
-            };
-
-            scripts.unshift(newScript); // Add new script to the top
-            saveScripts();
-            renderScripts(scripts);
-
-            // Reset form
-            document.getElementById('script-form').reset();
-        }
-
-        // Search scripts
-        function searchScripts() {
-            const query = document.getElementById('search-bar').value.toLowerCase();
-            const filteredScripts = scripts.filter(script => 
-                script.title.toLowerCase().includes(query) ||
-                script.author.toLowerCase().includes(query) ||
-                script.content.toLowerCase().includes(query)
-            );
-            renderScripts(filteredScripts);
-        }
-
-        // Render scripts to the page
-        function renderScripts(scriptList) {
-            const scriptSection = document.getElementById('script-section');
-            scriptSection.innerHTML = '<h2>Recent Pastes</h2>';
-
-            if (scriptList.length === 0) {
-                scriptSection.innerHTML += '<p style="color: #aaaaaa; text-align: center;">No scripts found.</p>';
-                return;
-            }
-
-            scriptList.forEach(script => {
-                const scriptCard = document.createElement('div');
-                scriptCard.className = 'script-card';
-                scriptCard.setAttribute('data-title', script.title);
-
-                scriptCard.innerHTML = `
-                    <div class="script-title">${script.title}</div>
-                    <div class="script-meta">Posted by: ${script.author} | Date: ${script.date}</div>
-                    <div class="${script.removed ? 'removed-notice' : 'script-code'}">
-                        ${script.removed ? script.content : 
-                        script.content
-                            .replace(/(local|if|then|end)/g, '<span class="keyword">$1</span>')
-                            .replace(/(Players|FindFirstChild)/g, '<span class="function">$1</span>')
-                            .replace(/"([^"]*)"/g, '<span class="string">"$1"</span>')
-                            .replace(/--.*/g, '<span class="comment">$1</span>')}
-                    </div>
-                `;
-                scriptSection.appendChild(scriptCard);
+        // Draw nebula
+        function drawNebula() {
+            nebula.forEach(n => {
+                n.y += n.speed;
+                if (n.y > canvas.height) n.y = 0;
+                ctx.fillStyle = n.color;
+                ctx.beginPath();
+                ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
+                ctx.fill();
             });
         }
 
-        // Initial render
-        renderScripts(scripts);
+        // Draw spaceship
+        function drawSpaceship() {
+            ctx.fillStyle = shieldActive ? '#00ffff' : '#00ff00';
+            ctx.beginPath();
+            ctx.moveTo(spaceship.x + spaceship.width / 2, spaceship.y - spaceship.height / 2);
+            ctx.lineTo(spaceship.x, spaceship.y + spaceship.height / 2);
+            ctx.lineTo(spaceship.x + spaceship.width, spaceship.y + spaceship.height / 2);
+            ctx.closePath();
+            ctx.fill();
+            ctx.strokeStyle = '#ff0066';
+            ctx.stroke();
+        }
+
+        // Draw asteroid
+        function drawAsteroid(asteroid) {
+            ctx.fillStyle = asteroid.size === 'large' ? '#ff0000' : asteroid.size === 'medium' ? '#ff6666' : '#ff0066';
+            ctx.beginPath();
+            ctx.arc(asteroid.x, asteroid.y, asteroid.radius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#00ff00';
+            ctx.stroke();
+        }
+
+        // Draw bullet
+        function drawBullet(bullet) {
+            ctx.fillStyle = '#00ff00';
+            ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+        }
+
+        // Draw power-up
+        function drawPowerUp(powerUp) {
+            ctx.fillStyle = powerUp.type === 'speed' ? '#00ff00' : powerUp.type === 'shield' ? '#ffff00' : '#00b7eb';
+            ctx.beginPath();
+            ctx.arc(powerUp.x, powerUp.y, powerUp.radius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#ff0066';
+            ctx.stroke();
+        }
+
+        // Draw particles
+        function drawParticles() {
+            particles = particles.filter(p => p.life > 0);
+            particles.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.life -= 0.05;
+                ctx.fillStyle = `rgba(255, 0, 102, ${p.life})`;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fill();
+            });
+        }
+
+        // Spawn asteroids
+        function spawnAsteroid() {
+            const sizes = ['small', 'medium', 'large'];
+            const size = sizes[Math.floor(Math.random() * 3)];
+            const radius = size === 'large' ? 30 : size === 'medium' ? 20 : 10;
+            const x = Math.random() * (canvas.width - radius * 2) + radius;
+            const health = size === 'large' ? 3 : size === 'medium' ? 2 : 1;
+            asteroids.push({ x, y: 0, radius, speed: gameSpeed, size, health });
+        }
+
+        // Spawn power-ups
+        function spawnPowerUp() {
+            const types = ['speed', 'shield', 'multiplier'];
+            const type = types[Math.floor(Math.random() * 3)];
+            const x = Math.random() * (canvas.width - 20) + 10;
+            powerUps.push({ x, y: 0, radius: 15, speed: gameSpeed, type });
+        }
+
+        // Shoot bullet
+        function shootBullet() {
+            bullets.push({ x: spaceship.x + spaceship.width / 2 - 2, y: spaceship.y - spaceship.height / 2, width: 4, height: 10, speed: 10 });
+            if (soundEnabled) playSound('shoot.mp3');
+        }
+
+        // Precise collision detection
+        function checkCollision(obj1, obj2) {
+            const dx = (obj1.x + obj1.width / 2) - (obj2.x);
+            const dy = (obj1.y) - (obj2.y);
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            return distance < (obj1.width / 2 + obj2.radius);
+        }
+
+        // Particle effects
+        function createParticles(x, y, count = 10) {
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x, y,
+                    radius: Math.random() * 3 + 1,
+                    vx: Math.random() * 4 - 2,
+                    vy: Math.random() * 4 - 2,
+                    life: 1
+                });
+            }
+        }
+
+        // Sound (placeholder)
+        function playSound(file) {
+            if (soundEnabled) {
+                // Uncomment and add audio files
+                // new Audio(file).play();
+            }
+        }
+
+        // Achievements
+        function checkAchievements() {
+            const newAchievements = [];
+            if (score >= 100 && !achievements.includes('First 100')) {
+                newAchievements.push('First 100');
+                achievements.push('First 100');
+            }
+            if (lives === 0 && score >= 500 && !achievements.includes('Survivor')) {
+                newAchievements.push('Survivor');
+                achievements.push('Survivor');
+            }
+            if (score >= 1000 && !achievements.includes('Master')) {
+                newAchievements.push('Master');
+                achievements.push('Master');
+            }
+            localStorage.setItem('achievements', JSON.stringify(achievements));
+            return newAchievements;
+        }
+
+        // Game loop
+        function gameLoop() {
+            if (gameOver || paused) return;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawNebula();
+            drawSpaceship();
+            drawParticles();
+
+            // Update asteroids
+            frameCount++;
+            if (frameCount % asteroidSpawnRate === 0) {
+                spawnAsteroid();
+                gameSpeed = Math.min(3, gameSpeed + 0.05); // Slower progression
+                asteroidSpawnRate = Math.max(40, asteroidSpawnRate - 1);
+            }
+            if (frameCount % 1200 === 0) {
+                spawnPowerUp();
+            }
+
+            asteroids = asteroids.filter(a => a.y < canvas.height + a.radius && a.health > 0);
+            asteroids.forEach(asteroid => {
+                asteroid.y += asteroid.speed;
+                drawAsteroid(asteroid);
+                if (!shieldActive && checkCollision(spaceship, asteroid)) {
+                    lives--;
+                    livesDisplay.textContent = `Lives: ${lives}`;
+                    createParticles(asteroid.x, asteroid.y, 20);
+                    asteroids = asteroids.filter(a => a !== asteroid);
+                    playSound('hit.mp3');
+                    if (lives <= 0) {
+                        endGame();
+                    }
+                }
+            });
+
+            // Update bullets
+            bullets = bullets.filter(b => b.y > -b.height);
+            bullets.forEach(bullet => {
+                bullet.y -= bullet.speed;
+                drawBullet(bullet);
+                asteroids.forEach(asteroid => {
+                    if (checkCollision(bullet, asteroid)) {
+                        asteroid.health--;
+                        if (asteroid.health <= 0) {
+                            asteroids = asteroids.filter(a => a !== asteroid);
+                            score += asteroid.size === 'large' ? 30 : asteroid.size === 'medium' ? 20 : 10;
+                            score *= scoreMultiplier;
+                            createParticles(asteroid.x, asteroid.y);
+                            playSound('explode.mp3');
+                        }
+                        bullets = bullets.filter(b2 => b2 !== bullet);
+                    }
+                });
+            });
+
+            // Update power-ups
+            powerUps = powerUps.filter(p => p.y < canvas.height + p.radius);
+            powerUps.forEach(powerUp => {
+                powerUp.y += powerUp.speed;
+                drawPowerUp(powerUp);
+                if (checkCollision(spaceship, powerUp)) {
+                    if (powerUp.type === 'speed') {
+                        spaceship.speed += 3;
+                        setTimeout(() => spaceship.speed = parseInt(sensitivityInput.value), 5000);
+                    } else if (powerUp.type === 'shield') {
+                        shieldActive = true;
+                        setTimeout(() => shieldActive = false, 5000);
+                    } else {
+                        scoreMultiplier = 2;
+                        setTimeout(() => scoreMultiplier = 1, 5000);
+                    }
+                    powerUps = powerUps.filter(p => p !== powerUp);
+                    createParticles(powerUp.x, powerUp.y);
+                    playSound('powerUp.mp3');
+                }
+            });
+
+            // Update score
+            score += Math.floor(frameCount / 120) * scoreMultiplier;
+            scoreDisplay.textContent = `Score: ${score}`;
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        // End game
+        function endGame() {
+            gameOver = true;
+            gameOverScreen.style.display = 'block';
+            finalScoreDisplay.textContent = score;
+            const newAchievements = checkAchievements();
+            achievementsList.innerHTML = newAchievements.length ? newAchievements.map(a => `<li>${a}</li>`).join('') : '<li>None</li>';
+            updateLeaderboard();
+            playSound('gameOver.mp3');
+        }
+
+        // Update leaderboard
+        function updateLeaderboard() {
+            leaderboard.push({ score, date: new Date().toLocaleString() });
+            leaderboard.sort((a, b) => b.score - a.score);
+            leaderboard = leaderboard.slice(0, 5);
+            localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
+            leaderboardList.innerHTML = leaderboard.map(entry => `<li>${entry.score} - ${entry.date}</li>`).join('');
+        }
+
+        // Controls
+        let keys = {};
+        document.addEventListener('keydown', (e) => {
+            keys[e.key] = true;
+            if (e.key === 'p' || e.key === 'P') togglePause();
+            if (e.key === 's' || e.key === 'S') showSettings();
+            if (e.key === ' ' && !paused && !gameOver) shootBullet();
+        });
+        document.addEventListener('keyup', (e) => {
+            keys[e.key] = false;
+        });
+
+        // Smooth movement
+        function updateSpaceship() {
+            const speed = parseInt(sensitivityInput.value);
+            if ((keys['ArrowLeft'] || keys['a'] || keys['A']) && spaceship.x > 0) {
+                spaceship.x -= speed;
+            }
+            if ((keys['ArrowRight'] || keys['d'] || keys['D']) && spaceship.x < canvas.width - spaceship.width) {
+                spaceship.x += speed;
+            }
+            if ((keys['ArrowUp'] || keys['w'] || keys['W']) && spaceship.y > 0) {
+                spaceship.y -= speed;
+            }
+            if ((keys['ArrowDown'] || keys['s'] || keys['S']) && spaceship.y < canvas.height - spaceship.height) {
+                spaceship.y += speed;
+            }
+        }
+
+        // Mouse controls
+        canvas.addEventListener('mousemove', (e) => {
+            if (paused || gameOver) return;
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            spaceship.x = Math.max(0, Math.min(mouseX - spaceship.width / 2, canvas.width - spaceship.width));
+        });
+
+        // Touch controls
+        let touchStartX = 0;
+        let touchStartY = 0;
+        canvas.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        });
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            const touchX = e.touches[0].clientX;
+            const touchY = e.touches[0].clientY;
+            const deltaX = (touchX - touchStartX) * (sensitivityInput.value / 6);
+            const deltaY = (touchY - touchStartY) * (sensitivityInput.value / 6);
+            spaceship.x = Math.max(0, Math.min(spaceship.x + deltaX, canvas.width - spaceship.width));
+            spaceship.y = Math.max(0, Math.min(spaceship.y + deltaY, canvas.height - spaceship.height));
+            touchStartX = touchX;
+            touchStartY = touchY;
+        });
+        canvas.addEventListener('touchend', () => {
+            if (!paused && !gameOver) shootBullet();
+        });
+
+        // Pause/resume
+        function togglePause() {
+            paused = !paused;
+            pauseMenu.style.display = paused ? 'block' : 'none';
+            if (!paused) gameLoop();
+        }
+
+        function resumeGame() {
+            paused = false;
+            pauseMenu.style.display = 'none';
+            gameLoop();
+        }
+
+        // Settings
+        function showSettings() {
+            paused = true;
+            settingsScreen.style.display = 'block';
+            pauseMenu.style.display = 'none';
+            gameOverScreen.style.display = 'none';
+            tutorialScreen.style.display = 'none';
+        }
+
+        function saveSettings() {
+            soundEnabled = soundToggle.checked;
+            spaceship.speed = parseInt(sensitivityInput.value);
+            settingsScreen.style.display = 'none';
+            if (!gameOver) {
+                paused = false;
+                gameLoop();
+            }
+        }
+
+        function closeSettings() {
+            settingsScreen.style.display = 'none';
+            if (gameOver) {
+                gameOverScreen.style.display = 'block';
+            } else {
+                pauseMenu.style.display = 'block';
+            }
+        }
+
+        // Tutorial
+        function showTutorial() {
+            paused = true;
+            tutorialScreen.style.display = 'block';
+            pauseMenu.style.display = 'none';
+            gameOverScreen.style.display = 'none';
+            settingsScreen.style.display = 'none';
+        }
+
+        function closeTutorial() {
+            tutorialScreen.style.display = 'none';
+            if (gameOver) {
+                gameOverScreen.style.display = 'block';
+            } else {
+                pauseMenu.style.display = 'block';
+            }
+        }
+
+        // Restart game
+        function restartGame() {
+            asteroids = [];
+            bullets = [];
+            powerUps = [];
+            particles = [];
+            score = 0;
+            lives = 3;
+            gameSpeed = 1.5;
+            asteroidSpawnRate = 70;
+            frameCount = 0;
+            shieldActive = false;
+            scoreMultiplier = 1;
+            gameOver = false;
+            paused = false;
+            gameOverScreen.style.display = 'none';
+            pauseMenu.style.display = 'none';
+            tutorialScreen.style.display = 'none';
+            scoreDisplay.textContent = `Score: ${score}`;
+            livesDisplay.textContent = `Lives: ${lives}`;
+            gameLoop();
+        }
+
+        // Animation loop
+        function animate() {
+            if (!paused && !gameOver) updateSpaceship();
+            requestAnimationFrame(animate);
+        }
+
+        // Start game
+        gameLoop();
+        animate();
     </script>
 </body>
 </html>
